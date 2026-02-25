@@ -4,14 +4,18 @@ function locomotiveAnimation() {
   const locoScroll = new LocomotiveScroll({
     el: document.querySelector("#main"),
     smooth: true,
-
-    // for tablet smooth
     tablet: { smooth: true },
-
-    // for mobile
     smartphone: { smooth: true },
   });
-  locoScroll.on("scroll", ScrollTrigger.update);
+
+  locoScroll.on("scroll", (args) => {
+    ScrollTrigger.update();
+
+    const nav = document.getElementById("mainNav");
+    if (nav) {
+      nav.classList.toggle("scrolled", args.scroll.y > 10);
+    }
+  });
 
   ScrollTrigger.scrollerProxy("#main", {
     scrollTop(value) {
@@ -30,8 +34,9 @@ function locomotiveAnimation() {
   });
 
   ScrollTrigger.addEventListener("refresh", () => locoScroll.update());
-
   ScrollTrigger.refresh();
+
+  window._locoScroll = locoScroll;
 }
 
 function loadingAnimation() {
@@ -62,8 +67,9 @@ function navAnimation() {
   var nav = document.querySelector("nav");
 
   nav.addEventListener("mouseenter", function () {
-    let tl = gsap.timeline();
+    if (document.getElementById("mobileMenu").classList.contains("open")) return;
 
+    let tl = gsap.timeline();
     tl.to("#nav-bottom", {
       height: "21vh",
       duration: 0.5,
@@ -74,19 +80,15 @@ function navAnimation() {
     });
     tl.to(".nav-part2 h5 span", {
       y: 0,
-      // duration:0.3,
-      stagger: {
-        amount: 0.5,
-      },
+      stagger: { amount: 0.5 },
     });
   });
+
   nav.addEventListener("mouseleave", function () {
     let tl = gsap.timeline();
     tl.to(".nav-part2 h5 span", {
       y: 25,
-      stagger: {
-        amount: 0.2,
-      },
+      stagger: { amount: 0.2 },
     });
     tl.to(".nav-part2 h5", {
       display: "none",
@@ -104,16 +106,10 @@ function page2Animation() {
 
   rightElems.forEach(function (elem) {
     elem.addEventListener("mouseenter", function () {
-      gsap.to(elem.childNodes[3], {
-        opacity: 1,
-        scale: 1,
-      });
+      gsap.to(elem.childNodes[3], { opacity: 1, scale: 1 });
     });
     elem.addEventListener("mouseleave", function () {
-      gsap.to(elem.childNodes[3], {
-        opacity: 0,
-        scale: 0,
-      });
+      gsap.to(elem.childNodes[3], { opacity: 0, scale: 0 });
     });
     elem.addEventListener("mousemove", function (dets) {
       gsap.to(elem.childNodes[3], {
@@ -136,6 +132,7 @@ function page3VideoAnimation() {
       borderRadius: 0,
     });
   });
+
   video.addEventListener("click", function () {
     video.pause();
     gsap.to(video, {
@@ -146,7 +143,6 @@ function page3VideoAnimation() {
   });
 
   var sections = document.querySelectorAll(".sec-right");
-
   sections.forEach(function (elem) {
     elem.addEventListener("mouseenter", function () {
       elem.childNodes[3].style.opacity = 1;
@@ -166,7 +162,6 @@ function page6Animations() {
     scrollTrigger: {
       trigger: "#btm6-part2",
       scroller: "#main",
-      // markers:true,
       start: "top 80%",
       end: "top 10%",
       scrub: true,
@@ -174,14 +169,58 @@ function page6Animations() {
   });
 }
 
+function burgerMenuAnimation() {
+  const burger     = document.getElementById("burger");
+  const mobileMenu = document.getElementById("mobileMenu");
+  const backdrop   = document.getElementById("menuBackdrop"); // ← NEW
+
+  if (!burger || !mobileMenu) return;
+
+  function toggleMenu() {
+    const isOpen = mobileMenu.classList.toggle("open");
+    burger.classList.toggle("active", isOpen);
+    document.body.classList.toggle("menu-open", isOpen);
+
+    // Toggle dark backdrop behind the panel ← NEW
+    if (backdrop) backdrop.classList.toggle("open", isOpen);
+
+    // Pause / resume Locomotive scroll
+    if (window._locoScroll) {
+      isOpen ? window._locoScroll.stop() : window._locoScroll.start();
+    }
+  }
+
+  burger.addEventListener("click", toggleMenu);
+
+  burger.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") toggleMenu();
+  });
+
+  // Close when a nav link is clicked
+  mobileMenu.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      if (mobileMenu.classList.contains("open")) toggleMenu();
+    });
+  });
+
+  // Close when backdrop is clicked ← NEW
+  if (backdrop) {
+    backdrop.addEventListener("click", () => {
+      if (mobileMenu.classList.contains("open")) toggleMenu();
+    });
+  }
+
+  // Close on Escape
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && mobileMenu.classList.contains("open")) toggleMenu();
+  });
+}
+
+// ── Init ──────────────────────────────────────────
 locomotiveAnimation();
-
 navAnimation();
-
 page2Animation();
-
 page3VideoAnimation();
-
 page6Animations();
-
 loadingAnimation();
+burgerMenuAnimation();
