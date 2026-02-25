@@ -12,78 +12,317 @@ body {
     width: 100%;
 }
 
-nav {
+  /* ─────────────── NAV ─────────────── */
+  nav {
     position: fixed;
-    display: flex;
-    align-items: flex-start;
-    height: 12vh;
+    top: 0; left: 0;
     width: 100%;
-    padding: 2vw 10.4vw;
+    height: 12vh;
+    min-height: 64px;
+    padding: 0 10.4vw;
+    display: flex;
+    align-items: center;
     justify-content: space-between;
     background-color: #ffffff;
-    z-index: 10;
-}
+    border-bottom: 1px solid #e8e8e8;
+    z-index: 1000;
+    transition: box-shadow 0.3s ease;
+  }
 
-nav h1 {
-    font-size: 1.6vw;
-}
+  nav.scrolled {
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+  }
 
-.nav-part2 {
+  nav h1 {
+    font-size: clamp(18px, 1.6vw, 26px);
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #000;
+    z-index: 1001;
+  }
+
+  /* ── Desktop links ── */
+  .nav-part2 {
     display: flex;
-    gap: 2vw;
-    align-items: flex-start;
-    padding: 1vh 0;
-    position: relative;
-    z-index: 10;
-}
+    gap: 2.5vw;
+    align-items: center;
+  }
 
-.nav-part2 h4 {
-    font-size: 0.73vw;
+  .nav-elem h4 {
+    font-size: clamp(11px, 0.75vw, 13px);
     text-transform: uppercase;
     font-weight: 600;
-    margin-bottom: 2.6vw;
-}
+    letter-spacing: 1.2px;
+    cursor: pointer;
+    position: relative;
+    padding-bottom: 3px;
+    color: #000;
+    transition: color 0.2s;
+  }
 
-.nav-part2 h5 {
-    margin-bottom: 1vw;
-    display: none;
-    overflow: hidden;
-}
+  .nav-elem h4::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 1.5px;
+    background: #6b6b3e;
+    transition: width 0.3s cubic-bezier(0.19,1,0.22,1);
+  }
 
-.nav-part2 h5 span {
-    font-size: 0.77vw;
-    font-weight: 400;
-    transform: translateY(25px);
-    display: inline-block;
-}
+  .nav-elem h4:hover::after { width: 100%; }
+  .nav-elem h4:hover { color: #6b6b3e; }
 
-nav button {
+  /* ── CTA button ── */
+  nav > button {
     background-color: #6b6b3e;
     display: flex;
     align-items: center;
-    padding: 14px 20px;
-    font-size: 0.85vw;
+    gap: 10px;
+    padding: 12px 22px;
+    font-size: clamp(11px, 0.85vw, 14px);
     text-transform: uppercase;
     font-weight: 700;
+    letter-spacing: 0.8px;
     border-radius: 50px;
     border: none;
-}
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    z-index: 1001;
+  }
 
-nav button svg {
-    height: 0.8vw;
-    margin-left: 1.6vw;
-}
+  nav > button:hover {
+    background-color: #555530;
+    transform: scale(1.03);
+  }
 
-#nav-bottom {
-    width: 79%;
-    height: 0vh;
+  nav > button svg {
+    height: 14px;
+    width: 14px;
+    flex-shrink: 0;
+  }
+
+  /* ── Burger icon ── */
+  .burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    z-index: 1001;
+    padding: 4px;
+  }
+
+  .burger span {
+    display: block;
+    height: 2px;
+    background: #000;
+    border-radius: 4px;
+    transition: all 0.4s cubic-bezier(0.19,1,0.22,1);
+    transform-origin: center;
+  }
+
+  /* Burger → X animation */
+  .burger.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .burger.active span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  .burger.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* ─────────────── MOBILE MENU OVERLAY ─────────────── */
+  .mobile-menu {
+    position: fixed;
+    top: 0; right: 0;
+    width: 100%;
+    height: 100dvh;
+    background: #ffffff;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 8vw;
+    transform: translateX(100%);
+    transition: transform 0.55s cubic-bezier(0.19,1,0.22,1);
+    overflow: hidden;
+  }
+
+  /* decorative accent stripe */
+  .mobile-menu::before {
+    content: '';
     position: absolute;
-    top: 100%;
-    background-color: #ffffff;
-    z-index: 9;
-    border-bottom: 1px solid #000000;
-}
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #6b6b3e, #b5b57a, #6b6b3e);
+    opacity: 0;
+    transition: opacity 0.4s 0.3s;
+  }
 
+  .mobile-menu.open {
+    transform: translateX(0);
+  }
+
+  .mobile-menu.open::before { opacity: 1; }
+
+  /* counter label */
+  .mobile-menu-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #aaa;
+    margin-bottom: 6vh;
+    padding-left: 4px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.4s 0.25s;
+  }
+
+  .mobile-menu.open .mobile-menu-label {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mobile-nav-links {
+    list-style: none;
+    width: 100%;
+  }
+
+  .mobile-nav-links li {
+    overflow: hidden;
+    border-bottom: 1px solid #efefef;
+  }
+
+  .mobile-nav-links li:first-child {
+    border-top: 1px solid #efefef;
+  }
+
+  .mobile-nav-links li a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 4px;
+    text-decoration: none;
+    color: #000;
+    font-size: clamp(28px, 7vw, 48px);
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    transform: translateY(60px);
+    opacity: 0;
+    transition:
+      transform 0.55s cubic-bezier(0.19,1,0.22,1),
+      opacity 0.55s cubic-bezier(0.19,1,0.22,1),
+      color 0.2s;
+  }
+
+  /* stagger each link */
+  .mobile-nav-links li:nth-child(1) a { transition-delay: 0.1s; }
+  .mobile-nav-links li:nth-child(2) a { transition-delay: 0.17s; }
+  .mobile-nav-links li:nth-child(3) a { transition-delay: 0.24s; }
+  .mobile-nav-links li:nth-child(4) a { transition-delay: 0.31s; }
+  .mobile-nav-links li:nth-child(5) a { transition-delay: 0.38s; }
+
+  .mobile-menu.open .mobile-nav-links li a {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .mobile-nav-links li a:hover { color: #6b6b3e; }
+
+  .mobile-nav-links li a .arrow {
+    font-size: 0.5em;
+    opacity: 0.3;
+    transition: opacity 0.2s, transform 0.3s;
+  }
+
+  .mobile-nav-links li a:hover .arrow {
+    opacity: 1;
+    transform: translateX(6px);
+  }
+
+  /* CTA inside mobile menu */
+  .mobile-cta {
+    margin-top: 6vh;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s 0.5s;
+  }
+
+  .mobile-menu.open .mobile-cta {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mobile-cta button {
+    background-color: #6b6b3e;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 32px;
+    font-size: clamp(13px, 3.5vw, 16px);
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+  }
+
+  .mobile-cta button:hover {
+    background: #555530;
+    transform: scale(1.03);
+  }
+
+  .mobile-cta button svg { height: 16px; width: 16px; }
+
+  /* social row at bottom of mobile menu */
+  .mobile-socials {
+    position: absolute;
+    bottom: 5vh;
+    left: 8vw;
+    display: flex;
+    gap: 24px;
+    opacity: 0;
+    transition: opacity 0.4s 0.6s;
+  }
+
+  .mobile-menu.open .mobile-socials { opacity: 1; }
+
+  .mobile-socials a {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .mobile-socials a:hover { color: #6b6b3e; }
+
+  /* ─────────────── RESPONSIVE ─────────────── */
+  @media (max-width: 768px) {
+    nav {
+      padding: 0 5vw;
+    }
+
+    .nav-part2 { display: none; }
+    nav > button { display: none; }
+    .burger { display: flex; }
+  }
+
+  /* Prevent body scroll when menu open */
+  body.menu-open { overflow: hidden; }
 /* ── PAGE 1 ── */
 #page1 {
     position: relative;
@@ -883,3 +1122,4 @@ summary::marker { content: ""; }
     #page6 > h1 { font-size: 12.5vw; line-height: 14vw; }
     #page6-content #right-6 p { font-size: 4.5vw; }
 }
+
