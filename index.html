@@ -15,29 +15,44 @@
 </head>
 
 <body>
+
   
-<!-- ═══════════════════ NAV ═══════════════════ -->
 <nav id="mainNav">
   <h1>OMGVA</h1>
 
   <!-- Desktop links -->
   <div class="nav-part2">
-    <div class="nav-elem"><h4>Home</h4></div>
-    <div class="nav-elem"><h4>About</h4></div>
-    <div class="nav-elem"><h4>Services</h4></div>
-    <div class="nav-elem"><h4>Donate</h4></div>
-    <div class="nav-elem"><h4>Contact</h4></div>
+    <div class="nav-elem">
+      <h4>Home</h4>
+      <h5><span>Home</span></h5>
+    </div>
+    <div class="nav-elem">
+      <h4>About</h4>
+      <h5><span>About</span></h5>
+    </div>
+    <div class="nav-elem">
+      <h4>Services</h4>
+      <h5><span>Services</span></h5>
+    </div>
+    <div class="nav-elem">
+      <h4>Donate</h4>
+      <h5><span>Donate</span></h5>
+    </div>
+    <div class="nav-elem">
+      <h4>Contact</h4>
+      <h5><span>Contact</span></h5>
+    </div>
   </div>
 
-  <!-- Desktop CTA -->
-  <button>Let's Talk
+  <!-- Desktop CTA (hidden on mobile via CSS) -->
+  <button class="nav-cta-btn">Let's Talk
     <svg fill="none" viewBox="0 0 20 20">
       <path fill="#fff" d="M2.5 14.375V17.5h3.125l9.217-9.217-3.125-3.125L2.5 14.375Zm14.758-8.508a.83.83 0 0 0 0-1.175l-1.95-1.95a.83.83 0 0 0-1.175 0l-1.525 1.525 3.125 3.125 1.525-1.525Z"/>
     </svg>
   </button>
 
-  <!-- Burger -->
-  <div class="burger" id="burger" aria-label="Toggle menu" role="button" tabindex="0">
+  <!-- Burger icon (visible only on mobile) -->
+  <div class="burger" id="burger" role="button" tabindex="0" aria-label="Toggle menu">
     <span></span>
     <span></span>
     <span></span>
@@ -46,7 +61,10 @@
   <div id="nav-bottom"></div>
 </nav>
 
-<!-- ═══════════════════ MOBILE MENU ═══════════════════ -->
+<!-- Backdrop (click to close menu) — MUST be outside #main -->
+<div class="mobile-menu-backdrop" id="menuBackdrop"></div>
+
+<!-- Right-side mobile menu panel — MUST be outside #main -->
 <div class="mobile-menu" id="mobileMenu">
   <p class="mobile-menu-label">Navigation</p>
 
@@ -359,20 +377,6 @@
 
     </div>
 
-          <div id="page1">
-    <div class="overlay"></div>
-
-    <div class="hero-content">
-        <h1 class="hero-title">Welcome to OMGVA</h1>
-        <h2 class="hero-subtitle">Spiritual Enlightenment & Community Service</h2>
-
-        <p class="hero-description">
-            Dedicated to spiritual awakening, inner peace, and humanitarian service
-            through yoga, meditation, and timeless wisdom.
-        </p>
-    </div>
-</div>
-
     <div id="page6-bottom">
 
         <div id="btm6-part1" class="btm6-parts"></div>
@@ -418,36 +422,8 @@
 
         </div>
     </div>
+   
 
-<script>
-  const burger     = document.getElementById('burger');
-  const mobileMenu = document.getElementById('mobileMenu');
-  const nav        = document.getElementById('mainNav');
-
-  function toggleMenu() {
-    const isOpen = mobileMenu.classList.toggle('open');
-    burger.classList.toggle('active', isOpen);
-    document.body.classList.toggle('menu-open', isOpen);
-  }
-
-  burger.addEventListener('click', toggleMenu);
-  burger.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') toggleMenu(); });
-
-  // Close on nav link click
-  mobileMenu.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', toggleMenu);
-  });
-
-  // Close on Escape
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && mobileMenu.classList.contains('open')) toggleMenu();
-  });
-
-  // Scroll shadow
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 10);
-  });
-</script>
     <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
         integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg=="
@@ -459,6 +435,4 @@
 </body>
 
 </html>
-
-
 
